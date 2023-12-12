@@ -1,20 +1,12 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
-/**
- * Custom hook for making HTTP requests.
- * 
- * @param {object} requestConfig - The configuration for the HTTP request.
- * @param {function} applyData - The function to apply the fetched data.
- * @returns {object} - An object containing isLoading, error, and sendRequest.
- */
-const useHttp = async (requestConfig, applyData) => {
+const useHttp =  () => {
+    // ! The state used in the custom hook is attached to the component that uses it.
+    // ! If there is any change in the state, the component will be re-rendered and re-evaluated.
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  /**
-   * Sends an HTTP request using the provided configuration.
-   */
-  const sendRequest = async () => {
+  const sendRequest = useCallback(async (requestConfig, applyData) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -34,7 +26,7 @@ const useHttp = async (requestConfig, applyData) => {
       setError(err.message || "Something went wrong!");
     }
     setIsLoading(false);
-  };
+  },[]);
 
   return {
     isLoading,
